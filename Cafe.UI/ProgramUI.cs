@@ -51,12 +51,12 @@ namespace Cafe.UI
                 case ConsoleKey.D2:
                 case ConsoleKey.NumPad2:
                     // Delete menu item
-                    //DisplayDeleteMenuItem();
+                    DisplayDeleteMenuItem();
                     break;
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
                     // View list of all menu items
-                    //DisplayViewMenu();
+                    DisplayViewMenu();
                     break;
                 case ConsoleKey.D4:
                 case ConsoleKey.NumPad4:
@@ -74,11 +74,15 @@ namespace Cafe.UI
         private void DisplayCreateMenuItem()
         {
             List<MenuItem> currentMenu = _menuRepo.GetMenu();
-            int number = DisplayCreateMenuItem_GetNumber(currentMenu);
-            string name = DisplayCreateMenuItem_GetName(currentMenu);
-            string description = DisplayCreateMenuItem_GetDescription();
+            MenuItem newItem = new MenuItem();
 
-            decimal markup = DisplayCreateMenuItem_GetMarkup();
+            newItem.Number = DisplayCreateMenuItem_GetNumber(currentMenu);
+            newItem.Name = DisplayCreateMenuItem_GetName(currentMenu);
+            newItem.Description = DisplayCreateMenuItem_GetDescription();
+            newItem.Recipe = DisplayCreateMenuItem_GetRecipe();
+            newItem.Markup = DisplayCreateMenuItem_GetMarkup();
+
+            _menuRepo.AddItemToMenu(newItem);
         }
 
         private int DisplayCreateMenuItem_GetNumber(List<MenuItem> currentMenu)
@@ -86,6 +90,7 @@ namespace Cafe.UI
             int suggestedNumber = 1;
             IEnumerable<int> usedNumbers = currentMenu.Select(item => item.Number).Distinct();
 
+            // Suggests the smallest number not currently occupied by another menu item
             while (true)
             {
                 if (usedNumbers.Contains(suggestedNumber))
@@ -97,7 +102,7 @@ namespace Cafe.UI
                     break;
                 }
             }
-            Console.WriteLine($"Meal number? (suggestion: {suggestedNumber})");
+            Console.Write($"Meal number? (suggestion: {suggestedNumber}) ");
             int number = default;
             while (!Int32.TryParse(Console.ReadLine(), out number) || usedNumbers.Contains(number))
             {
@@ -111,7 +116,7 @@ namespace Cafe.UI
         {
             IEnumerable<string> usedNames = currentMenu.Select(item => item.Name.ToLower()).Distinct();
 
-            Console.WriteLine("Meal name?");
+            Console.Write("\nMeal name? ");
             string name = Console.ReadLine();
             while (usedNames.Contains(name.ToLower()))
             {
@@ -124,18 +129,77 @@ namespace Cafe.UI
 
         private string DisplayCreateMenuItem_GetDescription()
         {
-            Console.WriteLine("Meal description?");
+            Console.Write("\nMeal description? ");
             return Console.ReadLine();
         }
 
         private Dictionary<Ingredient, decimal> DisplayCreateMenuItem_GetRecipe()
         {
+            Dictionary<Ingredient, decimal> recipe = new Dictionary<Ingredient, decimal>();
+            decimal amount;
 
+            List<Ingredient> listOfIngredients = DisplayIngredients();
+            Console.WriteLine();
+            foreach(Ingredient ingredient in listOfIngredients)
+            {
+                // Do not repeat ingredients
+                if (!recipe.ContainsKey(ingredient))
+                {
+                    // Print ingredient without 'Cafe.Models'
+                    Console.Write($"{ingredient.GetType().ToString().Substring(12)} - How many ounces of this ingredient do you need for the recipe? ");
+                    while (!Decimal.TryParse(Console.ReadLine(), out amount) || amount == 0)
+                    {
+                        Console.WriteLine("Invalid input; try again.");
+                    }
+                    recipe.Add(ingredient, amount);
+                }
+            }
+            return recipe;
+        }
+
+        private List<Ingredient> DisplayIngredients()
+        {
+            int index = 0;
+            List<Ingredient> listOfIngredients = new List<Ingredient>();
+
+            Console.WriteLine("\nWhat ingredients are needed for this menu item? (separated by a comma, e.g. \"1,3,5\")");
+            foreach (Ingredient ingredient in _pantryRepo.GetPantryList())
+            {
+                listOfIngredients.Add(ingredient);
+                // Print ingredient without 'Cafe.Models'
+                Console.WriteLine($"{index}. {ingredient.GetType().ToString().Substring(12)}");
+                index++;
+            }
+            return GetIngredientList(listOfIngredients);
+        }
+
+        private List<Ingredient> GetIngredientList(List<Ingredient> listOfIngredients)
+        {
+            List<Ingredient> selectedIngredients = new List<Ingredient>();
+
+            string selection = Console.ReadLine();
+            // Get input and check if string is numeric (with commas removed) and valid (not less than 0)
+            while (!Int32.TryParse(selection.Replace(",", ""), out int i) || i < 0)
+            {
+                Console.WriteLine("Invalid input; try again.");
+                selection = Console.ReadLine();
+            }
+            string[] numbersSelected = selection.Split(',');
+            foreach (string strNumber in numbersSelected)
+            {
+                // Add ingredient to list if the index is not greater than the list count
+                int number = Int32.Parse(strNumber);
+                if (number < listOfIngredients.Count)
+                {
+                    selectedIngredients.Add(listOfIngredients[number]);
+                }
+            }
+            return selectedIngredients;
         }
 
         private decimal DisplayCreateMenuItem_GetMarkup()
         {
-            Console.WriteLine("How much above cost should the meal be priced?\n" +
+            Console.WriteLine("\nHow much above cost should the meal be priced?\n" +
                               "Example: input of 1.5 would price the meal 50% above cost.");
             decimal markup = default;
             while (!Decimal.TryParse(Console.ReadLine(), out markup) || markup < 1)
@@ -151,6 +215,75 @@ namespace Cafe.UI
             }
 
             return markup;
+        }
+
+        private void DisplayDeleteMenuItem()
+        {
+            int number = default;
+            if (MenuIsEmpty())
+            {
+                return;
+            }
+            Console.WriteLine("Enter the number of the menu item you would like to delete:");
+            foreach (MenuItem item in _menuRepo.GetMenu())
+            {
+                Console.WriteLine($"{item.Number}. {item.Name}");
+            }
+            while (!Int32.TryParse(Console.ReadLine(), out number))
+            {
+                Console.WriteLine("Invalid input; try again.");
+            }
+            if (_menuRepo.RemoveItem(number))
+            {
+                Console.WriteLine("Menu item successfully deleted.\n" +
+                                  "Press any key to continue.");
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("Invalid input; no menu items were deleted.\n" +
+                                  "Press any key to continue.");
+                Console.ReadKey();
+            }
+        }
+
+        private bool MenuIsEmpty()
+        {
+            if (_menuRepo.GetMenu().Count < 1)
+            {
+                Console.WriteLine("The menu does not currently contain any menu items.\n" +
+                                  "Press any key to continue.");
+                Console.ReadKey();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void DisplayViewMenu()
+        {
+            if (MenuIsEmpty())
+            {
+                return;
+            }
+            foreach (MenuItem item in _menuRepo.GetMenu())
+            {
+                Console.WriteLine($"--------------------------------------------------------------------------------\n" +
+                                  $"Meal name: {item.Name}\n" +
+                                  $"Meal number: {item.Number}\n" +
+                                  $"Description: {item.Description}\n" +
+                                  $"Price: ${item.Price}\n" +
+                                  $"Recipe:");
+                foreach (var ingredient in item.Recipe)
+                {
+                    Console.WriteLine($"   {ingredient.Value} oz. of {ingredient.Key.GetType().ToString().Substring(12)}");
+                }
+            }
+            Console.WriteLine($"--------------------------------------------------------------------------------");
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
         }
 
         private void SeedMenuRepository()

@@ -12,9 +12,23 @@ namespace Cafe.Repos
         private List<MenuItem> _menu = new List<MenuItem>();
 
         // Create
-        public void AddItemToMenu(MenuItem item)
+        public bool AddItemToMenu(MenuItem item)
         {
+            if (item == null)
+            {
+                return false;
+            }
+
+            int itemCount = _menu.Count;
             _menu.Add(item);
+            if (_menu.Count > itemCount)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // Read
@@ -62,7 +76,7 @@ namespace Cafe.Repos
         public int RemoveItemsWithIngredient(Ingredient ingredient)
         {
             int itemsRemoved = 0;
-            foreach (MenuItem item in GetItemByIngredient(ingredient))
+            foreach (MenuItem item in GetItemsByIngredient(ingredient))
             {
                 if (RemoveItem(item))
                 {
@@ -97,7 +111,7 @@ namespace Cafe.Repos
             return null;
         }
 
-        public List<MenuItem> GetItemByIngredient(Ingredient ingredient)
+        public List<MenuItem> GetItemsByIngredient(Ingredient ingredient)
         {
             List<MenuItem> itemsWithIngredient = new List<MenuItem>();
             foreach (MenuItem item in _menu)
