@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Claim.cs" />
-    <Compile Include="Enumerations\Claims.Models.Enumerations.cs" />
+    <Compile Include="Enumerations\ClaimType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

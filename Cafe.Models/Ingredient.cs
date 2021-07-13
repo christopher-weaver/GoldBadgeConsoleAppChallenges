@@ -23,7 +23,7 @@ namespace Cafe.Models
 
         public decimal GetCostForAmount(decimal amountNeeded)
         {
-            return Cost / AmountPurchased * amountNeeded;
+            return Math.Round(Cost / AmountPurchased * amountNeeded, 2);
         }
     }
 }

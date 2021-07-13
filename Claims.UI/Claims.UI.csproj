@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2D9366CC-BE19-41A7-A795-C1332C0637D4}</ProjectGuid>
+    <ProjectGuid>{700203A6-DBA5-4F3A-B44F-2D27A8A8618F}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Claims.UI</RootNamespace>
     <AssemblyName>Claims.UI</AssemblyName>
@@ -44,10 +44,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
+    <Compile Include="ProgramUI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClaimRepository\Claims.Repos.csproj">
+      <Project>{4F79012B-218A-47FF-8D41-E5F279DCEDB3}</Project>
+      <Name>Claims.Repos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Claims.Models\Claims.Models.csproj">
+      <Project>{FD870C91-3E92-4BE2-BB3C-CB7AC9F582C2}</Project>
+      <Name>Claims.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

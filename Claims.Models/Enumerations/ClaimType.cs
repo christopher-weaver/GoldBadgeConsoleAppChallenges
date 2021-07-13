@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Claims.Models.Enumerations
 {
-    class Class1
+    public enum ClaimType
     {
+        Car,
+        Home,
+        Theft
     }
 }

@@ -44,5 +44,11 @@
     <Compile Include="ClaimRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Claims.Models\Claims.Models.csproj">
+      <Project>{FD870C91-3E92-4BE2-BB3C-CB7AC9F582C2}</Project>
+      <Name>Claims.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
