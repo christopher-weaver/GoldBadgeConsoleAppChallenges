@@ -274,7 +274,7 @@ namespace Cafe.UI
                                   $"Meal name: {item.Name}\n" +
                                   $"Meal number: {item.Number}\n" +
                                   $"Description: {item.Description}\n" +
-                                  $"Price: ${item.Price}\n" +
+                                  $"Price: {item.Price.ToString("C2")}\n" +
                                   $"Recipe:");
                 foreach (var ingredient in item.Recipe)
                 {

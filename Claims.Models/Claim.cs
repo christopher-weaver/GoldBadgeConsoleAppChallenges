@@ -24,6 +24,13 @@ namespace Claims.Models
                 return !(timeSinceIncident.Days > 30);                
             }
         }
+        public string LastFourOfClaimId
+        { 
+            get
+            {
+                return ClaimId.ToString().Substring(ClaimId.ToString().Length - 4);
+            }
+        }
 
         public Claim()
         {

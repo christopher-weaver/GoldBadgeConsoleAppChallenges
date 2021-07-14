@@ -8,7 +8,7 @@ namespace Claims.Models.Enumerations
 {
     public enum ClaimType
     {
-        Car,
+        Car = 1,
         Home,
         Theft
     }
