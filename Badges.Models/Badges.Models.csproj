@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Badge.cs" />
-    <Compile Include="Enumerations\Badges.Models.Enumerations.cs" />
+    <Compile Include="Enumerations\Door.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
