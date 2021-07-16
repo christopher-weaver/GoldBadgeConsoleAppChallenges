@@ -11,11 +11,17 @@ namespace Badges.Models
     {
         public int BadgeId { get; set; }
         public List<Door> Doors { get; set; } = new List<Door>();
-        public string Name { get; set; }
+        public string Name { get; set; } = "[unidentified]";
 
         public Badge()
         {
 
+        }
+
+        public Badge(int badgeId, List<Door> doors)
+        {
+            this.BadgeId = badgeId;
+            this.Doors = doors;
         }
 
         public Badge(int badgeId, List<Door> doors, string name)

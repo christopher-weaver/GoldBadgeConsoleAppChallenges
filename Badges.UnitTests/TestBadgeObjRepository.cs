@@ -4,13 +4,14 @@ using Badges.Models.Enumerations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using Badges.Repos.Contracts;
 
 namespace Badges.UnitTests
 {
     [TestClass]
-    public class Test
+    public class TestBadgeObjRepository
     {
-        private readonly BadgeRepository _badgeRepo = new BadgeRepository();
+        private readonly IBadgeRepository _badgeRepo = new BadgeObjRepository();
         private readonly Badge _badge1 = new Badge();
         private readonly Badge _badge2 = new Badge();
         private readonly Badge _badge3 = new Badge();

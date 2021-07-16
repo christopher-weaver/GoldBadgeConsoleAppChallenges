@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BadgeRepository.cs" />
+    <Compile Include="BadgeDictRepository.cs" />
+    <Compile Include="BadgeObjRepository.cs" />
+    <Compile Include="Contracts\IBadgeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

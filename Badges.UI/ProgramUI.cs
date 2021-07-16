@@ -1,6 +1,7 @@
 ﻿using Badges.Models;
 using Badges.Models.Enumerations;
 using Badges.Repos;
+using Badges.Repos.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +12,56 @@ namespace Badges.UI
 {
     public class ProgramUI
     {
-        private BadgeRepository _badgeList = new BadgeRepository();
+        private IBadgeRepository _badgeList;
 
         public void Run()
         {
-            SeedRepo();
-            Console.ReadLine();
-            bool keepRunning = true;
-
+            bool keepRunning = DisplayModularityChoice();
             while (keepRunning)
             {
-                keepRunning = DisplayMainMenu();
+                SeedRepo();
+                while (keepRunning)
+                {
+                    keepRunning = DisplayMainMenu();
+                }
+                keepRunning = DisplayModularityChoice();
+            }
+        }
+
+        private bool DisplayModularityChoice()
+        {
+            ConsoleKey selection = default;
+            while (selection != ConsoleKey.D1 && selection != ConsoleKey.NumPad1
+                   && selection != ConsoleKey.D2 && selection != ConsoleKey.NumPad2
+                   && selection != ConsoleKey.D3 && selection != ConsoleKey.NumPad3)
+            {
+                Console.Clear();
+                Console.Write("This console application utilizes modularity:\n\n" +
+                  "1. BadgeDictRepository - Dictionary<int, string>\n" +
+                  "2. BadgeObjRepository - List<Badge>\n" +
+                  "3. Exit\n\n" +
+                  "Please choose the Badge Repository type you would like to test: ");
+                selection = Console.ReadKey().Key;
+            }
+            return ProcessModularitySelection(selection);
+        }
+
+        private bool ProcessModularitySelection(ConsoleKey selection)
+        {
+            switch (selection)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    _badgeList = new BadgeDictRepository();
+                    return true;
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    _badgeList = new BadgeObjRepository();
+                    return true;
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                default:
+                    return false;
             }
         }
 

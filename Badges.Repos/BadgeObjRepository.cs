@@ -1,5 +1,6 @@
 ﻿using Badges.Models;
 using Badges.Models.Enumerations;
+using Badges.Repos.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Badges.Repos
 {
-    public class BadgeRepository
+    public class BadgeObjRepository : IBadgeRepository
     {
         private List<Badge> _badgeList = new List<Badge>();
 
