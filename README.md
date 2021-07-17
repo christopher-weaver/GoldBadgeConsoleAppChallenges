@@ -11,3 +11,6 @@ Claims department representatives for Komodo Insurance can use this console appl
 
 ## Challenge 3: Badges
 This application maintains a dictionary of details about employee badge information.  Doors are validated from a list of possible doors.  The user can add badges, edit badges (update doors/delete doors/delete all doors), and list all badge details.
+
+## Challenge 4: Company Outing
+Komodo accountants need a list of all outings, the cost of all outings combined, and the cost of all types of outings combined.  This program provide all of this.  I switched up the UI type in this one for practice.
